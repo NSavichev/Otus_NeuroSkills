@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SchulteTable.Maui.Pages.StatisticsPage"
+             Title="Статистика">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Статистика игр" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+            
+            <Label Text="Ваши результаты и прогресс" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" />
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+                <Label Grid.Row="0" Grid.Column="0" Text="Имя пользователя:" />
+                <Entry Grid.Row="0" Grid.Column="1" x:Name="UserNameEntry" Text="Player" />
+                
+                <Label Grid.Row="1" Grid.Column="0" Text="Размер сетки:" />
+                <Picker Grid.Row="1" Grid.Column="1" x:Name="GridSizePicker">
+                    <Picker.Items>
+                        <x:String>Все размеры</x:String>
+                        <x:String>4x4</x:String>
+                        <x:String>5x5</x:String>
+                        <x:String>6x6</x:String>
+                        <x:String>7x7</x:String>
+                        <x:String>8x8</x:String>
+                    </Picker.Items>
+                </Picker>
+                
+                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+                        Text="Загрузить статистику" 
+                        Clicked="OnLoadStatisticsClicked"
+                        BackgroundColor="#512BD4"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="20,10" />
+            </Grid>
+            
+            <Label x:Name="StatusLabel" 
+                   Text="Выберите параметры и нажмите 'Загрузить статистику'" 
+                   FontSize="14" 
+                   HorizontalOptions="Center" />
+            
+            <CollectionView x:Name="StatisticsCollectionView" 
+                           ItemsSource="{Binding Statistics}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" BackgroundColor="#F8F9FA" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Column="0" Text="{Binding DateCompleted, StringFormat='{0:dd.MM.yyyy HH:mm}'}" />
+                            <Label Grid.Column="1" Text="{Binding GridSize, StringFormat='{0}x{0}'}" />
+                            <Label Grid.Column="2" Text="{Binding TimeElapsed, StringFormat='{0:mm\\:ss\\.ff}'}" />
+                            <Label Grid.Column="3" Text="{Binding ErrorCount, StringFormat='Ошибок: {0}'}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Button Text="Главная" 
+                    Clicked="OnGoHomeClicked"
+                    BackgroundColor="#6C757D"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

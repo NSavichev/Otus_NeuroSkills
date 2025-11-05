@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SchulteTable.Maui.MainPage"
+             Title="Таблица Шульте">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Таблица Шульте" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+            
+            <Label Text="Нажмите 'Начать игру' для старта" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" />
+            
+            <Button Text="Начать игру" 
+                    Clicked="OnStartGameClicked"
+                    BackgroundColor="#512BD4"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10" />
+            
+            <Button Text="Сбросить" 
+                    Clicked="OnResetGameClicked"
+                    BackgroundColor="#6C757D"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10" />
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+                <Button Grid.Row="0" Grid.Column="0" 
+                        Text="Статистика" 
+                        Clicked="OnStatisticsClicked"
+                        BackgroundColor="#17A2B8"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="20,10"
+                        Margin="0,0,10,0" />
+                
+                <Button Grid.Row="0" Grid.Column="1" 
+                        Text="Настройки" 
+                        Clicked="OnSettingsClicked"
+                        BackgroundColor="#FFC107"
+                        TextColor="Black"
+                        CornerRadius="8"
+                        Padding="20,10"
+                        Margin="10,0,0,0" />
+            </Grid>
+            
+            <Label x:Name="StatusLabel" 
+                   Text="Готов к игре" 
+                   FontSize="14" 
+                   HorizontalOptions="Center" />
+            
+            <Label x:Name="TimerLabel" 
+                   Text="00:00" 
+                   FontSize="18" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            
+            <Label x:Name="CurrentNumberLabel" 
+                   Text="Текущее число: 1" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" />
+            
+            <Label x:Name="ErrorCountLabel" 
+                   Text="Ошибки: 0" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" />
+            
+            <Grid x:Name="GameGrid" 
+                  BackgroundColor="#F8F9FA"
+                  Padding="10"
+                  RowSpacing="5"
+                  ColumnSpacing="5"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  MaximumWidthRequest="600"
+                  MaximumHeightRequest="600" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

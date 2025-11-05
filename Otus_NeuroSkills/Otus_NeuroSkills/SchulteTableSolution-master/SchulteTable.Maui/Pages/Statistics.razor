@@ -1,0 +1,246 @@
+@page "/statistics"
+@using SchulteTable.Core.Services
+@using SchulteTable.Core.Models
+@using SchulteTable.Maui.Components
+@inject IStatisticsService StatisticsService
+@inject IThemeService ThemeService
+
+<PageTitle>Статистика - Таблица Шульте</PageTitle>
+
+<div class="game-container">
+    <div class="game-header">
+        <h1 class="game-title">Статистика</h1>
+        <p class="game-subtitle">Ваши результаты и прогресс</p>
+    </div>
+
+    <ThemeToggle />
+
+    <div class="stats-controls">
+        <div class="form-group">
+            <label for="userName">Имя пользователя:</label>
+            <input type="text" id="userName" @bind="userName" @onchange="LoadStatistics" />
+        </div>
+        
+        <div class="form-group">
+            <label for="gridSize">Размер сетки:</label>
+            <select id="gridSize" @bind="selectedGridSize" @onchange="LoadStatistics">
+                <option value="">Все размеры</option>
+                <option value="4">4x4</option>
+                <option value="5">5x5</option>
+                <option value="6">6x6</option>
+                <option value="7">7x7</option>
+                <option value="8">8x8</option>
+            </select>
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Загрузка статистики...</p>
+        </div>
+    }
+    else if (statistics.Any())
+    {
+        <div class="stats-summary">
+            <div class="summary-item">
+                <div class="summary-label">Всего игр</div>
+                <div class="summary-value">@statistics.Count</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Лучшее время</div>
+                <div class="summary-value">@GetBestTime()</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Среднее время</div>
+                <div class="summary-value">@GetAverageTime()</div>
+            </div>
+        </div>
+
+        <div class="stats-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Размер</th>
+                        <th>Время</th>
+                        <th>Ошибки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var stat in statistics.Take(20))
+                    {
+                        <tr>
+                            <td>@stat.DateCompleted.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@stat.GridSize x @stat.GridSize</td>
+                            <td>@FormatTime(stat.TimeElapsed)</td>
+                            <td>@stat.ErrorCount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-data">
+            <p>Нет данных для отображения</p>
+            <a href="/" class="btn btn-primary">Начать игру</a>
+        </div>
+    }
+
+    <div class="navigation">
+        <a href="/" class="btn btn-secondary">Главная</a>
+        <a href="/settings" class="btn btn-secondary">Настройки</a>
+    </div>
+</div>
+
+<style>
+    .stats-controls {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.75rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-size: 1rem;
+    }
+
+    .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-item {
+        background-color: var(--surface-color);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: var(--shadow);
+    }
+
+    .summary-label {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .stats-table {
+        background-color: var(--surface-color);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    .stats-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .stats-table th,
+    .stats-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .stats-table th {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+    }
+
+    .stats-table tbody tr:hover {
+        background-color: var(--background-color);
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+    }
+
+    .no-data p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+</style>
+
+@code {
+    private List<GameResult> statistics = new();
+    private string userName = "Player";
+    private int? selectedGridSize = null;
+    private bool isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStatistics();
+    }
+
+    private async Task LoadStatistics()
+    {
+        isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            statistics = await StatisticsService.GetUserStatisticsAsync(userName, selectedGridSize);
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибки
+            Console.WriteLine($"Ошибка загрузки статистики: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private string GetBestTime()
+    {
+        if (!statistics.Any()) return "00:00";
+        return FormatTime(statistics.Min(s => s.TimeElapsed));
+    }
+
+    private string GetAverageTime()
+    {
+        if (!statistics.Any()) return "00:00";
+        var average = TimeSpan.FromTicks((long)statistics.Average(s => s.TimeElapsed.Ticks));
+        return FormatTime(average);
+    }
+
+    private string FormatTime(TimeSpan time)
+    {
+        return $"{time.Minutes:D2}:{time.Seconds:D2}.{time.Milliseconds / 10:D2}";
+    }
+}

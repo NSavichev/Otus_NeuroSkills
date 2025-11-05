@@ -1,0 +1,121 @@
+@page "/"
+@using SchulteTable.Core.ViewModels
+@using SchulteTable.Core.Services
+@using SchulteTable.Maui.Components
+@using Microsoft.AspNetCore.Components.Web
+@inject MainViewModel ViewModel
+@inject IThemeService ThemeService
+@inject IJSRuntime JS
+
+<PageTitle>Таблица Шульте</PageTitle>
+
+<div class="game-container">
+    <div class="game-header">
+        <h1 class="game-title">Таблица Шульте</h1>
+        <p class="game-subtitle">Нажмите на числа по порядку от 1 до @(ViewModel.CurrentSession.TotalNumbers)</p>
+    </div>
+
+    <ThemeToggle />
+
+    <div class="game-controls">
+        <button class="btn btn-primary" @onclick="ViewModel.StartGameCommand.ExecuteAsync" 
+                disabled="@ViewModel.IsGameActive">
+            @if (ViewModel.IsGameActive)
+            {
+                <span>Игра идет...</span>
+            }
+            else
+            {
+                <span>Начать игру</span>
+            }
+        </button>
+        
+        <button class="btn btn-secondary" @onclick="ViewModel.ResetGameCommand.ExecuteAsync">
+            Сбросить
+        </button>
+    </div>
+
+    <div class="game-info">
+        <div class="info-item">
+            <div class="info-label">Время</div>
+            <div class="info-value">@ViewModel.TimerText</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Текущее число</div>
+            <div class="info-value">@ViewModel.CurrentNumber</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Ошибки</div>
+            <div class="info-value">@ViewModel.ErrorCount</div>
+        </div>
+    </div>
+
+    <div class="game-status">
+        @ViewModel.StatusMessage
+    </div>
+
+    @if (ViewModel.CurrentSession.Grid != null && ViewModel.CurrentSession.Grid.Length > 0)
+    {
+        <div class="game-grid" style="grid-template-columns: repeat(@(Math.Sqrt(ViewModel.CurrentSession.TotalNumbers)), 1fr);">
+            @for (int i = 0; i < Math.Sqrt(ViewModel.CurrentSession.TotalNumbers); i++)
+            {
+                @for (int j = 0; j < Math.Sqrt(ViewModel.CurrentSession.TotalNumbers); j++)
+                {
+                    var value = ViewModel.CurrentSession.Grid[i, j];
+                    var cssClass = GetCellCssClass(value);
+                    
+                    <GridCell Value="@value" 
+                             CssClass="@cssClass"
+                             IsEnabled="@ViewModel.IsGameActive"
+                             OnCellClicked="OnCellClicked" />
+                }
+            }
+        </div>
+    }
+
+    <div class="navigation">
+        <a href="/statistics" class="btn btn-secondary">Статистика</a>
+        <a href="/settings" class="btn btn-secondary">Настройки</a>
+    </div>
+</div>
+
+@code {
+    private string GetCellCssClass(int value)
+    {
+        if (!ViewModel.IsGameActive)
+            return "";
+
+        if (value < ViewModel.CurrentNumber)
+            return "completed";
+        
+        if (value == ViewModel.CurrentNumber)
+            return "current";
+
+        return "";
+    }
+
+    private async Task OnCellClicked(int value)
+    {
+        await ViewModel.SelectNumberCommand.ExecuteAsync(value);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ThemeService.InitializeAsync();
+        ThemeService.ThemeChanged += OnThemeChanged;
+    }
+
+    private async void OnThemeChanged(object? sender, ThemeMode theme)
+    {
+        await InvokeAsync(async () =>
+        {
+            await JS.InvokeVoidAsync("setTheme", theme.ToString().ToLower());
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ThemeService.ThemeChanged -= OnThemeChanged;
+    }
+}

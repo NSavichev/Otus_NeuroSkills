@@ -1,0 +1,230 @@
+@page "/settings"
+@using SchulteTable.Core.Services
+@using SchulteTable.Core.Models
+@using SchulteTable.Maui.Components
+@inject IThemeService ThemeService
+
+<PageTitle>Настройки - Таблица Шульте</PageTitle>
+
+<div class="game-container">
+    <div class="game-header">
+        <h1 class="game-title">Настройки</h1>
+        <p class="game-subtitle">Персонализируйте вашу игру</p>
+    </div>
+
+    <ThemeToggle />
+
+    <div class="settings-form">
+        <div class="form-group">
+            <label for="userName">Имя пользователя:</label>
+            <input type="text" id="userName" @bind="userName" placeholder="Введите ваше имя" />
+        </div>
+
+        <div class="form-group">
+            <label for="gridSize">Размер сетки по умолчанию:</label>
+            <select id="gridSize" @bind="selectedGridSize">
+                <option value="4">4x4 (16 чисел)</option>
+                <option value="5">5x5 (25 чисел)</option>
+                <option value="6">6x6 (36 чисел)</option>
+                <option value="7">7x7 (49 чисел)</option>
+                <option value="8">8x8 (64 числа)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Тема приложения:</label>
+            <div class="theme-options">
+                <label class="radio-option">
+                    <input type="radio" name="theme" value="Auto" @onchange="OnThemeChanged" checked="@(preferredTheme == ThemeMode.Auto)" />
+                    <span>Автоматически</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="theme" value="Light" @onchange="OnThemeChanged" checked="@(preferredTheme == ThemeMode.Light)" />
+                    <span>Светлая</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="theme" value="Dark" @onchange="OnThemeChanged" checked="@(preferredTheme == ThemeMode.Dark)" />
+                    <span>Темная</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" @onclick="SaveSettings">Сохранить настройки</button>
+            <button class="btn btn-secondary" @onclick="ResetSettings">Сбросить</button>
+        </div>
+    </div>
+
+    <div class="settings-info">
+        <h3>О приложении</h3>
+        <p>Таблица Шульте - это упражнение для развития внимания, концентрации и периферического зрения.</p>
+        <p>Цель игры: найти и нажать на числа в правильном порядке от 1 до максимального числа в сетке.</p>
+        
+        <h4>Правила:</h4>
+        <ul>
+            <li>Начинайте с числа 1</li>
+            <li>Нажимайте числа по порядку</li>
+            <li>Старайтесь делать это как можно быстрее</li>
+            <li>Избегайте ошибок</li>
+        </ul>
+
+        <h4>Советы:</h4>
+        <ul>
+            <li>Не смотрите на числа по очереди - используйте периферическое зрение</li>
+            <li>Сосредоточьтесь на центре таблицы</li>
+            <li>Регулярно тренируйтесь для улучшения результатов</li>
+        </ul>
+    </div>
+
+    <div class="navigation">
+        <a href="/" class="btn btn-secondary">Главная</a>
+        <a href="/statistics" class="btn btn-secondary">Статистика</a>
+    </div>
+</div>
+
+<style>
+    .settings-form {
+        background-color: var(--surface-color);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+
+    .theme-options {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+    }
+
+    .radio-option:hover {
+        background-color: var(--background-color);
+    }
+
+    .radio-option input[type="radio"] {
+        width: auto;
+        margin: 0;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .settings-info {
+        background-color: var(--surface-color);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    .settings-info h3,
+    .settings-info h4 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .settings-info p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .settings-info ul {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        padding-left: 1.5rem;
+    }
+
+    .settings-info li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+@code {
+    private string userName = "Player";
+    private int selectedGridSize = 5;
+    private ThemeMode preferredTheme = ThemeMode.Auto;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Загружаем сохраненные настройки
+        await LoadSettings();
+    }
+
+    private async Task LoadSettings()
+    {
+        // TODO: Загрузить настройки из базы данных или локального хранилища
+        await Task.CompletedTask;
+    }
+
+    private async Task SaveSettings()
+    {
+        // TODO: Сохранить настройки в базу данных или локальное хранилище
+        await ThemeService.SetThemeAsync(preferredTheme);
+        
+        // Показать уведомление об успешном сохранении
+        // Можно добавить toast уведомление
+    }
+
+    private async Task ResetSettings()
+    {
+        userName = "Player";
+        selectedGridSize = 5;
+        preferredTheme = ThemeMode.Auto;
+        
+        await ThemeService.SetThemeAsync(preferredTheme);
+        StateHasChanged();
+    }
+
+    private async Task OnThemeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<ThemeMode>(e.Value?.ToString(), out var theme))
+        {
+            preferredTheme = theme;
+            await ThemeService.SetThemeAsync(theme);
+        }
+    }
+}

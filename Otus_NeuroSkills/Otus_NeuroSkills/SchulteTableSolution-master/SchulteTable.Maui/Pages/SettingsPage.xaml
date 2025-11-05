@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SchulteTable.Maui.Pages.SettingsPage"
+             Title="Настройки">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Настройки" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+            
+            <Label Text="Персонализируйте вашу игру" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" />
+            
+            <Frame BackgroundColor="#F8F9FA" Padding="20" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Имя пользователя:" FontSize="16" FontAttributes="Bold" />
+                    <Entry x:Name="UserNameEntry" Text="Player" Placeholder="Введите ваше имя" />
+                    
+                    <Label Text="Размер сетки по умолчанию:" FontSize="16" FontAttributes="Bold" />
+                    <Picker x:Name="GridSizePicker" SelectedIndex="1">
+                        <Picker.Items>
+                            <x:String>4x4 (16 чисел)</x:String>
+                            <x:String>5x5 (25 чисел)</x:String>
+                            <x:String>6x6 (36 чисел)</x:String>
+                            <x:String>7x7 (49 чисел)</x:String>
+                            <x:String>8x8 (64 числа)</x:String>
+                        </Picker.Items>
+                    </Picker>
+                    
+                    <Label Text="Тема приложения:" FontSize="16" FontAttributes="Bold" />
+                    <Picker x:Name="ThemePicker" SelectedIndex="0">
+                        <Picker.Items>
+                            <x:String>Автоматически</x:String>
+                            <x:String>Светлая</x:String>
+                            <x:String>Темная</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+                <Button Grid.Row="0" Grid.Column="0" 
+                        Text="Сохранить" 
+                        Clicked="OnSaveSettingsClicked"
+                        BackgroundColor="#28A745"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="20,10"
+                        Margin="0,0,10,0" />
+                
+                <Button Grid.Row="0" Grid.Column="1" 
+                        Text="Сбросить" 
+                        Clicked="OnResetSettingsClicked"
+                        BackgroundColor="#DC3545"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="20,10"
+                        Margin="10,0,0,0" />
+            </Grid>
+            
+            <Label x:Name="StatusLabel" 
+                   Text="Настройки сохранены" 
+                   FontSize="14" 
+                   HorizontalOptions="Center" 
+                   IsVisible="False" />
+            
+            <Frame BackgroundColor="#E9ECEF" Padding="20" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="О приложении" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Таблица Шульте - это упражнение для развития внимания, концентрации и периферического зрения." 
+                           FontSize="14" />
+                    <Label Text="Цель игры: найти и нажать на числа в правильном порядке от 1 до максимального числа в сетке." 
+                           FontSize="14" />
+                    
+                    <Label Text="Правила:" FontSize="16" FontAttributes="Bold" />
+                    <Label Text="• Начинайте с числа 1" FontSize="14" />
+                    <Label Text="• Нажимайте числа по порядку" FontSize="14" />
+                    <Label Text="• Старайтесь делать это как можно быстрее" FontSize="14" />
+                    <Label Text="• Избегайте ошибок" FontSize="14" />
+                    
+                    <Label Text="Советы:" FontSize="16" FontAttributes="Bold" />
+                    <Label Text="• Не смотрите на числа по очереди - используйте периферическое зрение" FontSize="14" />
+                    <Label Text="• Сосредоточьтесь на центре таблицы" FontSize="14" />
+                    <Label Text="• Регулярно тренируйтесь для улучшения результатов" FontSize="14" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <Button Text="Главная" 
+                    Clicked="OnGoHomeClicked"
+                    BackgroundColor="#6C757D"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
