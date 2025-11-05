@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otus_NeuroSkills", "Otus_NeuroSkills\Otus_NeuroSkills\Otus_NeuroSkills.csproj", "{FA4C774F-4E97-4A26-97DF-4D5B2D42D0D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otus_NeuroSkills.Shared", "Otus_NeuroSkills\Otus_NeuroSkills.Shared\Otus_NeuroSkills.Shared.csproj", "{2CDA51E2-AF9C-4CF1-8AED-734B8E53612E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otus_NeuroSkills.Web", "Otus_NeuroSkills\Otus_NeuroSkills.Web\Otus_NeuroSkills.Web.csproj", "{FB984F25-C11D-400E-837E-26AF4C4E5AF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchulteTable.Core", "..\..\..\..\SchulteTableSolution\SchulteTable.Core\SchulteTable.Core.csproj", "{C48E66AA-7500-010A-3CAB-961E09C1CFDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchulteTable.Data", "..\..\..\..\SchulteTableSolution\SchulteTable.Data\SchulteTable.Data.csproj", "{8F644222-9452-23FE-B228-AD7785695769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchulteTable.Maui", "..\..\..\..\SchulteTableSolution\SchulteTable.Maui\SchulteTable.Maui.csproj", "{BD85C0BB-5E18-EAE4-7824-A06C5BD5A599}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,19 @@ Global
 		{FB984F25-C11D-400E-837E-26AF4C4E5AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB984F25-C11D-400E-837E-26AF4C4E5AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB984F25-C11D-400E-837E-26AF4C4E5AF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C48E66AA-7500-010A-3CAB-961E09C1CFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C48E66AA-7500-010A-3CAB-961E09C1CFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C48E66AA-7500-010A-3CAB-961E09C1CFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C48E66AA-7500-010A-3CAB-961E09C1CFDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F644222-9452-23FE-B228-AD7785695769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F644222-9452-23FE-B228-AD7785695769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F644222-9452-23FE-B228-AD7785695769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F644222-9452-23FE-B228-AD7785695769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD85C0BB-5E18-EAE4-7824-A06C5BD5A599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD85C0BB-5E18-EAE4-7824-A06C5BD5A599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD85C0BB-5E18-EAE4-7824-A06C5BD5A599}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BD85C0BB-5E18-EAE4-7824-A06C5BD5A599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD85C0BB-5E18-EAE4-7824-A06C5BD5A599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
